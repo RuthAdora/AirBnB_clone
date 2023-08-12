@@ -14,7 +14,7 @@ class FileStorage:
     __file_path = "file.json"
     __objects = {}
 
-    def all(self):
+    def all(self, ):
         "returns the dict __objects"
         return self.__objects
 
@@ -31,10 +31,9 @@ class FileStorage:
 
     def save(self):
         "serializes __objects to the JSON file"
-
+        x = self.__objects
         obj_dict = {
-                    key: value.to_dict() for key,
-                    value in self.__objects.items()
+                    key: value.to_dict() for key, value in x.items()
                     }
         with open(self.__file_path, "w") as f:
             json.dump(obj_dict, f)
@@ -46,7 +45,7 @@ class FileStorage:
         else it does none
         """
         if os.path.exists(self.__file_path):
-            with open(self.__file_path, "r") as file:
+            with open(self.__file_path, "r", encoding="utf8") as file:
                 obj_dict = json.load(file)
                 for key, value in obj_dict.items():
                     class_name, obj_id = key.split('.')

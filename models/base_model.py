@@ -36,7 +36,7 @@ class BaseModel:
         returns streing representation of the basemodel
         """
         x = self.__class__.__name__
-        return "[{}] ({}) {}".format(self.id, self.__dict__)
+        return "[{}] ({}) {}".format(x, self.id, self.__dict__)
 
     def save(self):
         """

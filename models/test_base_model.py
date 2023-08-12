@@ -3,6 +3,7 @@ from datetime import datetime
 import uuid
 from models.base_model import BaseModel
 
+
 class TestBaseModel(unittest.TestCase):
 
     def test_init(self):
@@ -37,6 +38,6 @@ class TestBaseModel(unittest.TestCase):
         self.assertIn('created_at', obj_dict)
         self.assertIn('updated_at', obj_dict)
 
+
 if __name__ == '__main__':
     unittest.main()
-

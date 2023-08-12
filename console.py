@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+from models import storage
 import models
 import cmd
 import sys
@@ -45,7 +47,8 @@ class HBNBCommand(cmd.Cmd):
             try:
                 class_ref = globals()[class_name]
                 n_instance = class_ref()
-                n_instance.save()
+                storage.new(n_instance)
+                storage.save()
                 print(n_instance.id)
             except KeyError:
                 print("** class doesn't exist **")
@@ -109,6 +112,89 @@ class HBNBCommand(cmd.Cmd):
             print(instance)
         except KeyError:
             print("** no instance found **")
+
+    def do_all(self, arg):
+        """
+        Prints string representation of all instances
+        based on the class name or all instances
+        """
+        args = arg.split()
+
+        if not args:
+            # is is all the instances
+            x = models.storage.all()
+            instance_list = [str(instance) for instance in x.values()]
+            print(instance_list)
+            return
+
+        class_name = args[0]
+
+        try:
+            class_ref = globals()[class_name]
+        except KeyError:
+            print("** class doesn't exist **")
+            return
+        # x is all the instances
+        x = models.storage.all()
+        filtered_instances = [
+                str(instance) for instance in x.values()
+                if isinstance(instance, class_ref)
+                ]
+        print(filtered_instances)
+
+    def do_pupdate(self, arg):
+        """
+        Updates an instance based on the class name and id
+        by adding or updating attributes
+        """
+        args = arg.split()
+
+        if not args:
+            print("** class name missing **")
+            return
+
+        class_name = args[0]
+
+        try:
+            class_ref = globals()[class_name]
+        except KeyError:
+            print("** class doesn't exist **")
+            return
+
+        if len(args) < 2:
+            print("** instance id missing **")
+            return
+
+        instance_id = args[1]
+        key = f"{class_name}.{instance_id}"
+
+        all_instances = models.storage.all()
+
+        if key not in all_instances:
+            print("** no instance found **")
+            return
+
+        if len(args) < 3:
+            print("** attribute name missing **")
+            return
+
+        attribute_name = args[2]
+
+        if len(args) < 4:
+            print("** value missing **")
+            return
+
+        attribute_value = args[3]
+        instance = all_instances[key]
+        attribute_type = getattr(instance, attribute_name, None)
+
+        if attribute_type is None:
+            print("** attribute doesn't exist **")
+            return
+
+        # Update the attribute with the provided value
+        setattr(instance, attribute_name, attribute_type(attribute_value))
+        instance.save()
 
 
 if __name__ == '__main__':
