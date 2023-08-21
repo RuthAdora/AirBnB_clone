@@ -10,7 +10,8 @@ class BaseModel:
     """
     def __init__(self, *args, **kwargs):
         """
-        Initialize an instance of BaseModel
+        Initialize an instance of BaseModel;
+        defines common attributes
         """
         if kwargs:
             for key, value in kwargs.items():
